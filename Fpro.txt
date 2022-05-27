@@ -1,0 +1,459 @@
+
+/**
+ * Write a description of class GUI here.
+ *
+ * @author (your name)
+ * @version (a version number or a date)
+ */
+import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.FileOutputStream;
+
+import javax.swing.*;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+public class GUI2 implements ActionListener {
+    private static JButton loginButton;
+    private static JButton createButton;
+    private static JButton createAccount;
+    private static JButton goBackMain;
+    private static JButton logOut;
+    private static JButton deposit;
+    private static JButton depositConfirm;
+    private static JButton withdraw;
+    private static JButton withdrawConfirm;
+    private static JLabel success;
+    private static JLabel errorMess;
+    private static JLabel userLabel;
+    private static JTextField userText;
+    private static JTextField depositAmount;
+    private static JTextField withdrawAmount;
+    private static JTextField cUser;
+    private static JPasswordField cPass;
+    private static JLabel passwordLabel;
+    private static JLabel Instructions;
+    private static JPasswordField passwordText;
+    private static JLabel BankName;
+    private static JLabel balanceLabel;
+    private static JLabel savingsLabel;
+    private static JLabel withdrawInstructions;
+    private static String userAttempt;
+    private static String passwordAttempt;
+    private static ArrayList<BankAccount> Accounts = new ArrayList<BankAccount>();
+    private static JPanel panel = new JPanel();
+    private static JPanel main; 
+    private static JPanel actual;
+    private static JPanel transfer;
+    private static JPanel withdrawPanel;
+    private static JPanel otherWindow;
+    private static JFrame frame = new JFrame();
+    private static JFrame depositF = new JFrame();
+    private static BankAccount accountQ;
+    
+    //starting screen containing login and create
+    public void GUI2(){
+        frame.setSize(450,280);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+        frame.add(panel);
+
+        panel.setLayout(null);
+        userLabel = new JLabel("User");
+        userLabel.setBounds(10, 90, 80, 25);
+        panel.add(userLabel);
+        
+        userText = new JTextField(20);
+        userText.setBounds(100, 90, 165, 25);
+        panel.add(userText);
+        
+        passwordLabel = new JLabel("password");
+        passwordLabel.setBounds(10, 120, 80, 25);
+        panel.add(passwordLabel);
+        
+        passwordText = new JPasswordField();
+        passwordText.setBounds(100, 120, 165, 25);
+        panel.add(passwordText);
+        
+        loginButton= new JButton("Login");
+        loginButton.setBounds(15, 150, 80, 25);
+        loginButton.addActionListener(new GUI2());
+        panel.add(loginButton);
+        
+        createButton = new JButton("Create");
+        createButton.setBounds(15,190,80,25);
+        createButton.addActionListener(new GUI2());
+        panel.add(createButton);
+        
+        JLabel or = new JLabel("or");
+        or.setBounds(50,170,80,25);
+        panel.add(or);
+        
+        success = new JLabel();
+        success.setBounds(100,150,400, 25);
+        panel.add(success);
+        success.setText("");
+        
+        
+        BankName= new JLabel("Samuel's Bank");
+        BankName.setFont(new Font("Serif", Font.BOLD, 35));
+        BankName.setBounds(15, 50, 1000, 30);
+        panel.add(BankName);
+        
+        frame.setVisible(true);
+    }
+    
+    
+    //panel for creating an account
+    public static JPanel mainMenuGUI() {
+        main = new JPanel();
+        main.setLayout(null);
+        
+        JLabel BankName= new JLabel("Samuel's Bank");
+        BankName.setFont(new Font("Serif", Font.BOLD, 35));
+        BankName.setBounds(100, 15, 1000, 30);
+        main.add(BankName);
+        
+        createAccount = new JButton("Create Account");
+        createAccount.setBounds(15, 150, 180, 25);
+        createAccount.addActionListener(new GUI2());
+        main.add(createAccount);
+ 
+        goBackMain = new JButton("Go Back");
+        goBackMain.setFont(new Font("Arial", Font.BOLD, 11));
+        goBackMain.setBounds(5,5,80,25);
+        goBackMain.addActionListener(new GUI2());
+        main.add(goBackMain);
+        
+        JLabel newUser = new JLabel("Username");
+        newUser.setBounds(10, 90, 80, 25);
+        main.add(newUser);
+        
+        cUser = new JTextField(20);
+        cUser.setBounds(100, 90, 165, 25);
+        main.add(cUser);
+        
+        JLabel passwordLabel = new JLabel("password");
+        passwordLabel.setBounds(10, 120, 80, 25);
+        main.add(passwordLabel);
+        
+        cPass = new JPasswordField();
+        cPass.setBounds(100, 120, 165, 25);
+        main.add(cPass);
+        
+        errorMess = new JLabel();
+        errorMess.setBounds(20,180,250, 50);
+        errorMess.setText("");
+        main.add(errorMess);
+        
+        
+        return main;
+    }
+    public static JPanel actual() {
+        actual= new JPanel();
+        actual.setLayout(null);
+        
+        JLabel BankName= new JLabel("Samuel's Bank");
+        BankName.setFont(new Font("Serif", Font.BOLD, 35));
+        BankName.setBounds(100, 15, 1000, 30);
+        actual.add(BankName);
+        
+        logOut = new JButton("Log Out");
+        logOut.setFont(new Font("Arial", Font.BOLD, 11));
+        logOut.setBounds(5,5,80,25);
+        logOut.addActionListener(new GUI2());
+        actual.add(logOut);
+        
+        JLabel welcome = new JLabel("welcome  " + userAttempt);
+        welcome.setFont(new Font("Serif", Font.BOLD, 20));
+        welcome.setBounds(125, 45, 1000, 30);
+        actual.add(welcome);
+
+        balanceLabel = new JLabel("Checking Balance:  $" + accountQ.getBalance());
+        balanceLabel.setFont(new Font("Serif", Font.BOLD, 18));
+        balanceLabel.setBounds(50, 90, 1000, 30);
+        actual.add(balanceLabel);
+        
+        savingsLabel = new JLabel("Savings Balance:     $"+ accountQ.getSavings());
+        savingsLabel.setFont(new Font("Serif", Font.BOLD, 18));
+        savingsLabel.setBounds(50, 120, 1000, 30);
+        actual.add(savingsLabel);
+        
+        deposit = new JButton("Deposit");
+        deposit.setBounds(40,170,120,25);
+        deposit.addActionListener(new GUI2());
+        actual.add(deposit);
+        
+        withdraw = new JButton("withdraw");
+        withdraw.setBounds(200,170,120,25);
+        withdraw.addActionListener(new GUI2());
+        actual.add(withdraw);
+        
+        return actual;
+    }
+    public static JFrame depositFrame(){
+        depositF.setTitle("SECURE CONNECTION");
+        depositF.setSize(300,200);
+        depositF.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        depositF.setVisible(true);
+        return depositF;
+    }
+    
+    public static JPanel depositPanel(){
+       transfer = new JPanel();
+       transfer.setLayout(null);
+       transfer.setVisible(true);
+       
+       JLabel BankName= new JLabel("Samuel's Bank");
+       BankName.setFont(new Font("Serif", Font.BOLD, 35));
+       BankName.setBounds(25, 15, 1000, 30);
+       transfer.add(BankName);
+       
+       JLabel Savings = new JLabel("Savings Balance:     $"+ accountQ.getSavings());
+       Savings.setBounds(50, 40, 1000, 30);
+       transfer.add(Savings);
+       
+       depositConfirm = new JButton("deposit");
+       depositConfirm.setBounds(60,130,130,25);
+       depositConfirm.addActionListener(new GUI2());
+       transfer.add(depositConfirm);
+       
+       Instructions = new JLabel("enter amount to deposit into savings");
+       Instructions.setFont(new Font("Arial", 0, 10));
+       Instructions.setBounds(40, 78, 1000, 30);
+       transfer.add(Instructions);
+       
+       depositAmount = new JTextField(20);
+       depositAmount.setBounds(50, 100, 165, 25);
+       transfer.add(depositAmount);
+       
+       JLabel Balance = new JLabel("Checking Balance:  $"+ accountQ.getBalance() );
+       Balance.setBounds(50, 60, 1000, 30);
+       transfer.add(Balance);
+        
+       
+       return transfer;
+    }
+    public static JPanel withdrawPanel(){
+       withdrawPanel = new JPanel();
+       withdrawPanel.setLayout(null);
+       withdrawPanel.setVisible(true);
+       
+       JLabel BankName= new JLabel("Samuel's Bank");
+       BankName.setFont(new Font("Serif", Font.BOLD, 35));
+       BankName.setBounds(25, 15, 1000, 30);
+       withdrawPanel.add(BankName);
+       
+       JLabel Savings = new JLabel("Savings Balance:     $"+ accountQ.getSavings());
+       Savings.setBounds(50, 40, 1000, 30);
+       withdrawPanel.add(Savings);
+       
+       withdrawConfirm = new JButton("withdraw");
+       withdrawConfirm.setBounds(60,130,130,25);
+       withdrawConfirm.addActionListener(new GUI2());
+       withdrawPanel.add(withdrawConfirm);
+       
+       withdrawInstructions = new JLabel("enter amount to withdraw from savings");
+       withdrawInstructions.setFont(new Font("Arial", 0, 10));
+       withdrawInstructions.setBounds(40, 78, 1000, 30);
+       withdrawPanel.add(withdrawInstructions);
+       
+       withdrawAmount = new JTextField(20);
+       withdrawAmount.setBounds(50, 100, 165, 25);
+       withdrawPanel.add(withdrawAmount);
+       
+       JLabel Balance = new JLabel("Checking Balance:  $"+ accountQ.getBalance() );
+       Balance.setBounds(50, 60, 1000, 30);
+       withdrawPanel.add(Balance);
+        
+       
+       return withdrawPanel;
+    }
+    public static JPanel otherWindow(){
+       otherWindow = new JPanel();
+       otherWindow.setLayout(null);
+       otherWindow.setVisible(true);
+       
+       JLabel notice = new JLabel("please continue on the other window");
+       notice.setFont(new Font("Serif", Font.BOLD, 25));
+       notice.setBounds(20, 30, 1000, 30);
+       otherWindow.add(notice);
+       
+       return otherWindow;
+    }
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource().equals(loginButton)){
+            userAttempt = userText.getText();
+            passwordAttempt = passwordText.getText();
+            System.out.println(userAttempt +", "+passwordAttempt);
+            for(BankAccount account : Accounts){
+                if(getUserAttempt().equals(account.getUsername()) &&  getPasswordAttempt().equals(account.getPassword())){
+                    GUI2.setSuccess("Login Succesful!");
+                    panel.setVisible(false);
+                    accountQ = new BankAccount(account.getUsername(), account.getPassword(), account.getBalance(),account.getSavings());
+                    frame.add(actual());
+                    return;
+                }
+            }
+            setSuccess("Username or Password was incorrect, please try again");
+            return;
+        }
+         else if(e.getSource().equals(createButton)){
+             panel.setVisible(false);
+             frame.add(mainMenuGUI()); 
+             
+         }
+         else if(e.getSource().equals(createAccount)){
+             System.out.println("test");  
+             for(BankAccount account : Accounts){
+                if(getCUser().getText().equals(account.getUsername())){
+                    setErrorMess("Username already taken.");
+                    return;
+                }
+                System.out.println(getCUser().getText());
+             }
+             if((getCUser().getText().equals("") || getCPass().getText().equals(""))){
+                    setErrorMess("Please enter a username and password");
+                }
+             else if(getCUser().getText().contains(" ") || getCUser().getText().contains("\\")){
+                setErrorMess("Please remove all spaces and backslashes");
+                }
+             else{
+                    try{
+                    PrintWriter outFile = new PrintWriter(new FileOutputStream(new File("Accounts.txt"),true));
+                    outFile.append("\n" + getCUser().getText() + ";" + getCPass().getText() + ";0;10000");
+                    outFile.close();
+                    
+                    setErrorMess("Account successfully created!");
+                    frame.remove(main);
+                    setCUser("");
+                    setCPass("");
+                    setErrorMess("");
+                    panel.setVisible(true);
+                    accountCheck();
+                  }
+                    catch(Exception r){
+                        setErrorMess("Error creating your account \nERROR: " + r);
+                    }
+                }
+      }
+      else if(e.getSource().equals(goBackMain)){
+            frame.remove(main);
+            
+            panel.setVisible(true);
+            setCUser("");
+            setCPass("");
+            userText.setText("");
+            passwordText.setText("");
+        }
+      else if(e.getSource().equals(logOut)){
+            frame.remove(actual);
+            panel.setVisible(true);
+            userText.setText("");
+            passwordText.setText("");
+            success.setText("");
+        }
+      else if(e.getSource().equals(deposit)){
+           depositFrame();
+           depositF.add(depositPanel());
+           actual.setVisible(false);
+           frame.add(otherWindow());
+           //deposit.add();
+        }
+      else if(e.getSource().equals(withdraw)){
+           depositFrame();
+           depositF.add(withdrawPanel());
+           actual.setVisible(false);
+           frame.add(otherWindow());
+           
+        }
+      else if(e.getSource().equals(depositConfirm)){
+          if(Double.parseDouble(depositAmount.getText())>accountQ.getBalance()){
+            Instructions.setText("you cant deposit more than you have!");
+            }
+          else{
+            accountQ.setBalance(accountQ.getBalance() - Double.parseDouble(depositAmount.getText()));
+            accountQ.setSavings(accountQ.getSavings() + Double.parseDouble(depositAmount.getText()));
+            balanceLabel.setText("Checking Balance:  $" + accountQ.getBalance());
+            savingsLabel.setText("Savings Balance:     $"+ accountQ.getSavings());
+            depositF.remove(transfer);
+            depositF.dispose();
+            actual.setVisible(true);
+            otherWindow.setVisible(false);
+            }
+        }
+      else if(e.getSource().equals(withdrawConfirm)){
+        if(Double.parseDouble(withdrawAmount.getText())>accountQ.getSavings()){
+            Instructions.setText("you cant withdraw more than you have!");
+            }
+          else{
+            accountQ.setBalance(accountQ.getBalance() + Double.parseDouble(withdrawAmount.getText()));
+            accountQ.setSavings(accountQ.getSavings() - Double.parseDouble(withdrawAmount.getText()));
+            balanceLabel.setText("Checking Balance:  $" + accountQ.getBalance());
+            savingsLabel.setText("Savings Balance:     $"+ accountQ.getSavings());
+            depositF.remove(withdrawPanel);
+            depositF.dispose();
+            actual.setVisible(true);
+            otherWindow.setVisible(false);
+            }
+        }
+    }
+    public static ArrayList<BankAccount> accountCheck()throws IOException{
+        Scanner inFile = new Scanner(new File("Accounts.txt"));
+        try {
+            while (inFile.hasNextLine()) {
+                String[] temp = inFile.nextLine().split(";"); 
+                Accounts.add(new BankAccount(temp[0],temp[1],Double.parseDouble(temp[2]),Double.parseDouble(temp[3])));
+            }
+            inFile.close();
+        }
+        catch(Exception e){
+            System.out.println("error: " + e);
+        }
+        return Accounts;
+     }
+    
+    public static void saveChanges(){
+        String accountsSave="";
+        for(BankAccount accounts :Accounts){
+            accountsSave+=acc
+        }
+    } 
+    
+    public static String getUserAttempt(){
+        return userAttempt;
+    }
+    public static String getPasswordAttempt(){
+        return passwordAttempt;
+    }
+    
+    public static void setSuccess(String newMessage){
+        success.setText(newMessage);
+    }
+    
+    public static void setErrorMess(String newMessage){
+        errorMess.setText(newMessage);
+    }
+
+    public ArrayList<BankAccount> getAccounts(){
+        return Accounts;
+    }
+    public static JTextField getCUser(){
+        return cUser;
+    }
+    public static JPasswordField getCPass(){
+        return cPass;
+    }
+    public static void setCUser(String string){
+        cUser.setText(string);
+    }
+    public static void setCPass(String string){
+        cPass.setText(string);
+    }
+
+ }
+
+

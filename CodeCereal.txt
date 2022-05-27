@@ -1,0 +1,54 @@
+
+/**
+ * Write a description of class CerealTester here.
+ *
+ * @author (your name)
+ * @version (a version number or a date)
+ */
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.io.File;
+public class CerealTester
+{
+    //This will hold our list of Cereal objects
+    private static ArrayList<Cereal> cerealList = new ArrayList<Cereal>();
+    
+    public static void main(String[] args)
+    {
+        try {
+            Scanner input = new Scanner(new File("cereal.csv"));
+            input.nextLine(); //First line of file is just a header
+            while(input.hasNextLine()){
+                String[] temp = input.nextLine().split(",");    //comma-separated values
+                
+                /*
+                 * This next line is VERY specific to cereal.csv and the order of
+                 * the columns in that document. Additionally, the order matters
+                 * to our Cereal constructor, since it expects certain parameters
+                 * in a certain order.
+                 */
+                cerealList.add(new Cereal(temp[0],temp[1],Integer.parseInt(temp[2]),
+                                Integer.parseInt(temp[3]),Integer.parseInt(temp[4]),
+                                Integer.parseInt(temp[5]),Double.parseDouble(temp[6]),
+                                Double.parseDouble(temp[7]),Integer.parseInt(temp[8]),
+                                Integer.parseInt(temp[9]),Integer.parseInt(temp[10]),
+                                Integer.parseInt(temp[11]),Double.parseDouble(temp[12]),
+                                Double.parseDouble(temp[13]),Double.parseDouble(temp[14])));
+            }
+            input.close();
+        }
+        catch(Exception e){
+            /*
+             * If there is an issue finding, reading, or parsing the file
+             * to create Cereal objects, display this message.
+             */
+            System.out.println("Error reading or parsing cereal.csv");
+        }
+        
+        //one example of why it's useful to have Cereal objects!
+        for(Cereal cereal:cerealList)
+        {
+            System.out.println(cereal);
+        }
+    }
+}
